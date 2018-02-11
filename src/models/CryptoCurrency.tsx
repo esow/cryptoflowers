@@ -2,16 +2,16 @@ export default interface CryptoCurrency {
 	"id": string;
 	"name": string;
 	"symbol": string;
-	"rank": string;
-	"price_usd": string;
-	"price_btc": string;
-	"24h_volume_usd": string;
-	"market_cap_usd": string;
-	"available_supply": string;
-	"total_supply": string;
-	"max_supply": string;
-	"percent_change_1h": string;
-	"percent_change_24h": string;
-	"percent_change_7d": string;
+	"rank": number;
+	"price_usd": number;
+	"price_btc": number;
+	"24h_volume_usd": number;
+	"market_cap_usd": number;
+	"available_supply": number;
+	"total_supply": number;
+	"max_supply": number;
+	"percent_change_1h": number;
+	"percent_change_24h": number;
+	"percent_change_7d": number;
 	"last_updated": string;
 }
