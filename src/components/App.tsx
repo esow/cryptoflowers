@@ -40,10 +40,14 @@ export default class App extends React.Component<AppProps, AppState> {
 		const svg = d3.select(" svg");
 
 		const sizeExtent = d3.extent(coins, d => Math.abs(+d.market_cap_usd));
-		const numPetalsExtent = d3.extent(coins, d => Math.abs(+d.percent_change_24h));
+
+		// amount of petals
+		var minMarketCap = d3.min(coins, d => d.market_cap_usd);
+		var maxMarketCap = d3.max(coins, d => d.market_cap_usd);
+		numPetalsScale.domain([minMarketCap, maxMarketCap] as any);
+		// http://bl.ocks.org/sxywu/raw/d612c6c653fb8b4d7ff3d422be164a5d/ <-- Use this to calculate proper amout of petals based on total marketcap
 		// set domain on scales
 		sizeScale.domain(sizeExtent as any);
-		numPetalsScale.domain(numPetalsExtent as any);
 
 		// 2. create a <g> for each flower
 		// and translate+scale the whole flower
