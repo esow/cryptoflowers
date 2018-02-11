@@ -1,0 +1,7 @@
+{
+    "editor.formatOnSave": true,
+    "editor.detectIndentation": false,
+    "tslint.autoFixOnSave": true,
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4
+}
