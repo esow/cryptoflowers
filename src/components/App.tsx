@@ -22,7 +22,7 @@ export default class App extends React.Component<AppProps, AppState> {
 		fetch("https://api.coinmarketcap.com/v1/ticker/")
 			.then(res => res.json())
 			.then(json => this.setState({
-				cryptocurrencies: json
+				cryptocurrencies: json.map((x: any) => ({ id: x.id, name: x.name, market_cap_usd: x.market_cap_usd, volume: x["24h_volume_usd"], rank: x.rank }))
 				// tslint:disable-next-line:align
 			}, () => this.renderFlowers()));
 	}
@@ -43,7 +43,7 @@ export default class App extends React.Component<AppProps, AppState> {
 			// const min = d3.min(coins, d => d.market_cap_usd);
 
 			const sizeExtent = d3.extent(coins, d => d.market_cap_usd);
-			const numPetalsExtent = d3.extent(coins, d => d.market_cap_usd);
+			const numPetalsExtent = d3.extent(coins, d => d.volume);
 
 			// sizeScale.domain([min as any, max as any]);
 			// numPetalsScale.domain([min as any, max as any]);
@@ -52,7 +52,7 @@ export default class App extends React.Component<AppProps, AppState> {
 			numPetalsScale.domain(numPetalsExtent as any);
 
 			// 2. create petal data for just the first movie
-			const numPetals = numPetalsScale(coins[index].market_cap_usd);
+			const numPetals = numPetalsScale(coins[index].volume);
 			const petalData = _.times(numPetals, (i) => {
 				// 1. rotation of the petal
 				const rotate = (i / numPetals) * 360;
