@@ -32,23 +32,23 @@ export default class App extends React.Component<AppProps, AppState> {
 
 		const coins = this.state.cryptocurrencies;
 		// instantiate scales and petal path lookup
-		const sizeScale = d3.scaleLinear().range([0.1, 0.16]);
+		const sizeScale = d3.scaleLog().range([0.1, 1]);
 		const numPetalsScale = d3.scaleQuantize().range(_.range(3, 7));
 
 		coins.forEach((x, index) => {
 			// grab svg
 			const svg = d3.select(`#coin-${x.id}`);
 
-			// const max = d3.max(coins, d => d.market_cap_usd);
-			// const min = d3.min(coins, d => d.market_cap_usd);
+			const max = d3.max(coins, d => d.market_cap_usd);
+			const min = d3.min(coins, d => d.market_cap_usd);
 
-			const sizeExtent = d3.extent(coins, d => d.market_cap_usd);
+			// const sizeExtent = d3.extent(coins, d => d.market_cap_usd);
 			const numPetalsExtent = d3.extent(coins, d => d.volume);
 
-			// sizeScale.domain([min as any, max as any]);
+			sizeScale.domain([min as any, max as any]);
 			// numPetalsScale.domain([min as any, max as any]);
 
-			sizeScale.domain(sizeExtent as any);
+			// sizeScale.domain(sizeExtent as any);
 			numPetalsScale.domain(numPetalsExtent as any);
 
 			// 2. create petal data for just the first movie
@@ -58,6 +58,7 @@ export default class App extends React.Component<AppProps, AppState> {
 				const rotate = (i / numPetals) * 360;
 				// 2. path of petal (pg)
 				// 3. size of petals (IMDB ratings)
+				console.log(sizeScale(coins[index].market_cap_usd), coins[index].name);
 				return {
 					rotate,
 					path: petalPaths,
