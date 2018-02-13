@@ -22,34 +22,31 @@ export default class App extends React.Component<AppProps, AppState> {
 		fetch("https://api.coinmarketcap.com/v1/ticker/")
 			.then(res => res.json())
 			.then(json => this.setState({
-				cryptocurrencies: json.map((x: any) => ({ id: x.id, name: x.name, market_cap_usd: x.market_cap_usd, volume: x["24h_volume_usd"], rank: x.rank }))
+				// tslint:disable-next-line:radix
+				cryptocurrencies: json.map((x: any) => ({ id: x.id, name: x.name, market_cap_usd: parseInt(x.market_cap_usd), volume: x["24h_volume_usd"], rank: x.rank }))
 				// tslint:disable-next-line:align
 			}, () => this.renderFlowers()));
 	}
 
 	renderFlowers = () => {
 		// const flowerSize = 250;
-
 		const coins = this.state.cryptocurrencies;
-		// instantiate scales and petal path lookup
-		const sizeScale = d3.scaleLog().range([0.1, 1]);
+
+		// Amount of petals
 		const numPetalsScale = d3.scaleQuantize().range(_.range(3, 7));
+		const numPetalsExtent = d3.extent(coins, d => d.volume);
+		numPetalsScale.domain(numPetalsExtent as any);
+
+		// Size of flowers
+		const sizeScale = d3.scaleLinear().range([0.1, 1.2]);
+		const sizeExtend = d3.extent(coins, d => d.market_cap_usd);
+		sizeScale.domain(sizeExtend as any);
+
+		console.log(d3.extent(coins, d => d.market_cap_usd));
 
 		coins.forEach((x, index) => {
-			// grab svg
+			// grab svg = 
 			const svg = d3.select(`#coin-${x.id}`);
-
-			const max = d3.max(coins, d => d.market_cap_usd);
-			const min = d3.min(coins, d => d.market_cap_usd);
-
-			// const sizeExtent = d3.extent(coins, d => d.market_cap_usd);
-			const numPetalsExtent = d3.extent(coins, d => d.volume);
-
-			sizeScale.domain([min as any, max as any]);
-			// numPetalsScale.domain([min as any, max as any]);
-
-			// sizeScale.domain(sizeExtent as any);
-			numPetalsScale.domain(numPetalsExtent as any);
 
 			// 2. create petal data for just the first movie
 			const numPetals = numPetalsScale(coins[index].volume);
