@@ -29,11 +29,10 @@ export default class App extends React.Component<AppProps, AppState> {
 	}
 
 	renderFlowers = () => {
-		// const flowerSize = 250;
 		const coins = this.state.cryptocurrencies;
 
 		// Amount of petals
-		const numPetalsScale = d3.scaleQuantize().range(_.range(3, 10));
+		const numPetalsScale = d3.scaleQuantize().range(_.range(3, 15));
 		const numPetalsExtent = d3.extent(coins, d => d.volume);
 		numPetalsScale.domain(numPetalsExtent as any);
 
@@ -45,21 +44,17 @@ export default class App extends React.Component<AppProps, AppState> {
 		console.log(d3.extent(coins, d => d.market_cap_usd));
 
 		coins.forEach((x, index) => {
-			// grab svg = 
 			const svg = d3.select(`#coin-${x.id}`);
 
 			const numPetals = numPetalsScale(coins[index].volume);
 			const petalData = _.times(numPetals, (i) => {
-				// 1. rotation of the petal
 				const rotate = (i / numPetals) * 360;
-				// 2. path of petal (pg)
-				// 3. size of petals (IMDB ratings)
-				console.log(sizeScale(coins[index].market_cap_usd), coins[index].name);
 				return {
 					rotate,
 					path: petalPaths,
 					size: sizeScale(coins[index].market_cap_usd),
-					color: d3.interpolateRainbow(i / numPetals)
+					color: d3.interpolateRainbow(i / numPetals),
+					name: coins[index].id
 				};
 			});
 
@@ -70,9 +65,10 @@ export default class App extends React.Component<AppProps, AppState> {
 				})
 				.attr("d", d => d.path as any)
 				.attr("fill", d => d.color)
-				.attr("stroke", "#000")
+				.attr("stroke", "#333")
 				.attr("stroke-width", d => 1 / d.size)
-				.style("mix-blend-mode", "multiply");
+				.style("mix-blend-mode", "multiply")
+				.on("click", d => window.open(`https://coinmarketcap.com/currencies/${d.name}/`));
 		});
 
 	}
@@ -87,7 +83,6 @@ export default class App extends React.Component<AppProps, AppState> {
 				</header>
 
 				<div className="sub-header">top 100 crypto currencies reimagined as flowers</div>
-				{/* <svg /> */}
 				<div className="coins">
 					{
 						coins.map((coin: CryptoCurrency) => (

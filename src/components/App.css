@@ -34,6 +34,7 @@ svg {
 	flex-wrap: wrap;
 
 	text-align: center;
+	pointer-events: none;
 }
 
 .title {
@@ -49,10 +50,15 @@ svg {
 	text-align: center;
 	width: 1200px;
 }
+
 div.coin {
 	height: 300px;
 	width: 25%;	
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+div.coin:hover {
+	background-color: rgba(150, 150, 150, 0.144);
+	border-radius: 150px;
 }
