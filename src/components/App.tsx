@@ -23,7 +23,7 @@ export default class App extends React.Component<AppProps, AppState> {
 			.then(res => res.json())
 			.then(json => this.setState({
 				// tslint:disable-next-line:radix
-				cryptocurrencies: json.map((x: any) => ({ id: x.id, name: x.name, market_cap_usd: parseInt(x.market_cap_usd), volume: x["24h_volume_usd"], rank: x.rank }))
+				cryptocurrencies: json.map((x: any) => ({ id: x.id, name: x.name, market_cap_usd: parseInt(x.market_cap_usd), volume: parseInt(x["24h_volume_usd"]), rank: x.rank }))
 				// tslint:disable-next-line:align
 			}, () => this.renderFlowers()));
 	}
@@ -33,7 +33,7 @@ export default class App extends React.Component<AppProps, AppState> {
 		const coins = this.state.cryptocurrencies;
 
 		// Amount of petals
-		const numPetalsScale = d3.scaleQuantize().range(_.range(3, 7));
+		const numPetalsScale = d3.scaleQuantize().range(_.range(3, 10));
 		const numPetalsExtent = d3.extent(coins, d => d.volume);
 		numPetalsScale.domain(numPetalsExtent as any);
 
@@ -48,7 +48,6 @@ export default class App extends React.Component<AppProps, AppState> {
 			// grab svg = 
 			const svg = d3.select(`#coin-${x.id}`);
 
-			// 2. create petal data for just the first movie
 			const numPetals = numPetalsScale(coins[index].volume);
 			const petalData = _.times(numPetals, (i) => {
 				// 1. rotation of the petal
@@ -60,6 +59,7 @@ export default class App extends React.Component<AppProps, AppState> {
 					rotate,
 					path: petalPaths,
 					size: sizeScale(coins[index].market_cap_usd),
+					color: d3.interpolateRainbow(i / numPetals)
 				};
 			});
 
@@ -69,9 +69,10 @@ export default class App extends React.Component<AppProps, AppState> {
 					return `translate(125,125)rotate(${d.rotate})scale(${d.size})`;
 				})
 				.attr("d", d => d.path as any)
-				.attr("fill", "none")
+				.attr("fill", d => d.color)
 				.attr("stroke", "#000")
-				.attr("stroke-width", d => 1 / d.size);
+				.attr("stroke-width", d => 1 / d.size)
+				.style("mix-blend-mode", "multiply");
 		});
 
 	}
