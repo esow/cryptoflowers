@@ -82,7 +82,10 @@ export default class App extends React.Component<AppProps, AppState> {
 					cryptoflowers
 				</header>
 
-				<div className="sub-header">top 100 crypto currencies reimagined as flowers</div>
+				<div className="sub-header">Top 100 crypto currencies reimagined as flowers</div>
+				<div>Size symbolizes market cap</div>
+				<div>Number of petals symbolizes 24 hour volume</div>
+
 				<div className="coins">
 					{
 						coins.map((coin: CryptoCurrency) => (

@@ -26,6 +26,5 @@
 		"@types/react": "^16.0.36",
 		"@types/react-dom": "^16.0.3",
 		"typescript": "^2.7.1"
-	},
-	"homepage": "https://esow.github.io/cryptoflowers"
+	}
 }
